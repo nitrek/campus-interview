@@ -1,6 +1,4 @@
-Here’s your **Python Question Bank** reformatted as **Markdown** with a **Table of Contents** for easy navigation:
 
----
 
 # **Python Question Bank**
 

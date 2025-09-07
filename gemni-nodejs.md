@@ -1,6 +1,4 @@
-Here’s your **Node.js Question Bank** reformatted in **Markdown** with a **Table of Contents** for easy navigation:
 
----
 
 # **Node.js Question Bank**
 

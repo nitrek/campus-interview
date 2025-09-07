@@ -1,6 +1,4 @@
-Here’s the **Resume and Projects Question Bank** reformatted into **Markdown** with a **Table of Contents**:
 
----
 
 # **Question Bank: Resume and Projects**
 

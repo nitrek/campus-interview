@@ -1,6 +1,4 @@
-Here’s the **React Question Bank** reformatted into **Markdown** with a **Table of Contents**:
 
----
 
 # **React Question Bank**
 

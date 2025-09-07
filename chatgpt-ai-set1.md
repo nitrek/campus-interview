@@ -1,6 +1,3 @@
-Here’s an **additional question set** for **AI, Machine Learning, and NLP** topics, following the same format (Theory, Practical, and Programming), with **solutions, hints, follow-up questions, and scoring guide**.
-
----
 
 ## ✅ **AI, Machine Learning & NLP Interview Question Pack**
 

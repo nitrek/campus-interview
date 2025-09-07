@@ -1,6 +1,4 @@
-Here’s your **DBMS Question Bank reformatted into Markdown** with a **Table of Contents**:
 
----
 
 # **DBMS Question Bank**
 

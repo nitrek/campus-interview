@@ -1,6 +1,4 @@
-Here’s your **Java Question Bank reformatted as Markdown** with a **Table of Contents**:
 
----
 
 # **Java Question Bank**
 
