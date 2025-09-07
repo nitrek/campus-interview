@@ -34,3 +34,6 @@ Question: How would you scale [specific project] to handle 10x the current numbe
 Answer: This is a mini system design question. Think about bottlenecks. "To scale our web app, the first bottleneck would likely be the single database instance. I would start by introducing a read replica to offload read queries. For the application layer, I would containerize the Node.js server using Docker and deploy it on a platform like Kubernetes, which would allow us to horizontally scale by adding more server instances behind a load balancer. Finally, I'd use a Content Delivery Network (CDN) to serve static assets like images and JS files to reduce latency for users globally."
 Hint: Break the problem down into different parts of the application: frontend, backend, database.
 Follow-up: "What kind of load balancer would you use? What are the trade-offs between horizontal and vertical scaling?"
+
+
+only reformat this as markdown , also add table of content

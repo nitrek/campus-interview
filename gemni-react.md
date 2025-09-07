@@ -60,3 +60,6 @@ Nature: HOCs are functions that return components (component wrappers). Hooks ar
 Composition: HOCs wrap components, which can lead to "wrapper hell" (many nested components in the React DevTools). Hooks are just function calls and don't add extra components to the tree.
 Logic Sharing: HOCs share logic by injecting props. Hooks share stateful logic directly with the component that calls them. Custom hooks are now the preferred and more idiomatic way to share reusable logic between components in modern React.
 Hint: HOCs are a pattern from the class-component era. Custom hooks are the modern, simpler way to achieve the same goal of sharing logic in functional components.
+
+
+only reformat this as markdown , also add table of content

@@ -61,3 +61,5 @@ Using JOIN: Perform a JOIN in the initial query to retrieve both the posts and t
 Using IN clause: Fetch all the posts first. Then, collect all the author_ids from the posts and fetch all the corresponding authors in a single second query using an IN clause (e.g., SELECT * FROM authors WHERE id IN (1, 2, 5, ...)).
 Hint: It's a common performance bottleneck in applications that use ORMs (Object-Relational Mapping).
 Follow-up: "When might using a JOIN be less performant than using an IN clause?"
+
+only reformat this as markdown , also add table of content

@@ -57,3 +57,5 @@ __delete__(self, instance): Called to delete the attribute from the owner's inst
 This protocol is the underlying mechanism behind properties, methods, static methods, and class methods. For example, when you define a property using @property, you are creating a descriptor. When you access a function on an instance (e.g., my_obj.my_method), the __get__ method of the function object is called, which binds the function to the instance, creating a "bound method."
 Hint: It's a hook that lets you control what happens when you get, set, or delete an attribute on an object. It's how Python's properties and methods work under the hood.
 Follow-up: "What's the difference between a data descriptor and a non-data descriptor?"
+
+only reformat this as markdown , also add table of content

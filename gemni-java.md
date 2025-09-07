@@ -73,3 +73,5 @@ It calculates the hashCode() of the key and finds the bucket index, just like in
 It then searches the linked list or tree in that bucket, using equals() to find the exact match for the key, and returns the corresponding value.
 Hint: It's a combination of an array and linked lists/trees. hashCode() tells you which list to look in, and equals() finds the right item in that list.
 Follow-up: "What happens when the HashMap becomes too full? (It gets resized)."
+
+only reformat this as markdown , also add table of content

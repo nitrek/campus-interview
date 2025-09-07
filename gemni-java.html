@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Interview Prep Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Brilliant Blues -->
+    <!-- Application Structure Plan: The SPA is structured as a thematic dashboard. It starts with a high-level overview using KPI cards and a donut chart to show question distribution. A sticky navigation bar allows users to filter questions by difficulty (Easy, Medium, Difficult). The main content area dynamically displays questions for the selected category in a two-column grid of cards. This structure was chosen to allow users to progressively drill down from a general overview to specific topics, which is a more intuitive user flow for studying than a linear document. Interactions are centered around filtering to provide a focused learning experience. -->
+    <!-- Visualization & Content Choices: 
+        - Question Counts: Goal: Inform -> Viz: Big Number KPI Cards -> Justification: Provides a quick, scannable summary of content. Method: HTML/Tailwind.
+        - Difficulty Distribution: Goal: Compare -> Viz: Donut Chart -> Justification: Effectively shows the proportion of questions in each difficulty category. Library: Chart.js/Canvas.
+        - Core Concepts Comparison: Goal: Compare -> Viz: Radar Chart -> Justification: Visually compares the "weight" or complexity of different core Java concepts mentioned in the questions (Memory, OOP, Collections, Concurrency). Library: Chart.js/Canvas.
+        - Question Display: Goal: Organize -> Viz: Interactive Card Layout -> Justification: Organizes questions and answers in a clean, digestible format that can be filtered. Method: JS DOM Manipulation + HTML/Tailwind.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* A light, neutral blue-gray */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .nav-btn.active {
+            background-color: #0077b6;
+            color: #ffffff;
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #0077b6;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="text-[#023e8a]">
+
+    <div class="container mx-auto p-4 sm:p-6 md:p-8">
+        
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-[#03045e]">Java Interview Dashboard</h1>
+            <p class="mt-3 text-lg text-[#0077b6]">An interactive guide to core Java concepts for technical interviews.</p>
+        </header>
+
+        <section id="overview" class="mb-10">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-2xl shadow-md flex flex-col items-center justify-center text-center">
+                    <h3 class="text-xl font-semibold text-[#0077b6]">Total Questions</h3>
+                    <p id="totalQuestions" class="text-5xl font-bold text-[#03045e] mt-2">9</p>
+                </div>
+                 <div class="bg-white p-6 rounded-2xl shadow-md flex flex-col items-center justify-center text-center">
+                    <h3 class="text-xl font-semibold text-[#0077b6]">Easy Questions</h3>
+                    <p id="easyQuestions" class="text-5xl font-bold text-green-500 mt-2">3</p>
+                </div>
+                 <div class="bg-white p-6 rounded-2xl shadow-md flex flex-col items-center justify-center text-center">
+                    <h3 class="text-xl font-semibold text-[#0077b6]">Medium Questions</h3>
+                    <p id="mediumQuestions" class="text-5xl font-bold text-yellow-500 mt-2">3</p>
+                </div>
+                 <div class="bg-white p-6 rounded-2xl shadow-md flex flex-col items-center justify-center text-center">
+                    <h3 class="text-xl font-semibold text-[#0077b6]">Difficult Questions</h3>
+                    <p id="difficultQuestions" class="text-5xl font-bold text-red-500 mt-2">3</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+            <div class="bg-white p-6 rounded-2xl shadow-md">
+                <h2 class="text-2xl font-bold text-center mb-4">Difficulty Distribution</h2>
+                <div class="chart-container">
+                    <canvas id="difficultyChart"></canvas>
+                </div>
+                 <p class="text-center text-sm text-gray-500 mt-4">The questions are evenly distributed, providing a balanced learning path from foundational to complex topics.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-md">
+                <h2 class="text-2xl font-bold text-center mb-4">Core Concept Radar</h2>
+                 <div class="chart-container">
+                    <canvas id="conceptRadarChart"></canvas>
+                </div>
+                <p class="text-center text-sm text-gray-500 mt-4">This chart highlights the emphasis on different core Java areas within the question set. "Collections & Internals" and "OOP Principles" are central themes.</p>
+            </div>
+        </section>
+
+        <nav class="sticky top-0 bg-[#f0f4f8] py-4 z-10 mb-8 flex justify-center items-center space-x-2 md:space-x-4 bg-opacity-90 backdrop-blur-sm rounded-xl shadow-sm">
+            <button data-filter="all" class="nav-btn active px-4 py-2 font-semibold rounded-lg transition-colors duration-200">All Questions</button>
+            <button data-filter="Easy" class="nav-btn px-4 py-2 font-semibold rounded-lg transition-colors duration-200">Easy</button>
+            <button data-filter="Medium" class="nav-btn px-4 py-2 font-semibold rounded-lg transition-colors duration-200">Medium</button>
+            <button data-filter="Difficult" class="nav-btn px-4 py-2 font-semibold rounded-lg transition-colors duration-200">Difficult</button>
+        </nav>
+
+        <main id="questions-container" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Questions will be injected here by JavaScript -->
+        </main>
+
+        <div class="bg-white p-6 rounded-2xl shadow-md mt-8">
+            <h2 class="text-2xl font-bold text-center mb-4">LLM-Powered Features</h2>
+            <p class="text-center text-sm text-gray-500 mb-4">You can now leverage AI to get a new question or simplify an existing answer.</p>
+            <div class="flex justify-center mb-4">
+                <button id="generateQuestionBtn" class="bg-[#0077b6] text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-[#005c8a] transition-colors duration-200 flex items-center">
+                    <span id="generateQuestionText">Generate a New ✨ Question</span>
+                    <div id="generateQuestionSpinner" class="spinner ml-2 hidden"></div>
+                </button>
+            </div>
+            <div id="newQuestionContainer" class="hidden bg-[#fafcff] p-6 rounded-xl border border-gray-200">
+                <h3 id="newQuestionTitle" class="text-xl font-bold text-[#03045e] mb-3"></h3>
+                <div id="newQuestionAnswer" class="text-gray-600 space-y-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questionData = [
+            {
+                difficulty: "Easy",
+                title: "What is the difference between JDK, JRE, and JVM?",
+                answer: `<strong>JVM (Java Virtual Machine):</strong> An abstract machine providing the runtime environment for Java bytecode. It's the core of the 'write once, run anywhere' principle.<br><br><strong>JRE (Java Runtime Environment):</strong> An implementation of the JVM. It contains the JVM, class libraries, and files needed to run Java programs.<br><br><strong>JDK (Java Development Kit):</strong> A superset of the JRE, including development tools like the compiler (javac) and debugger. Essential for writing Java code.`
+            },
+            {
+                difficulty: "Easy",
+                title: "What is the difference between \`String\`, \`StringBuilder\`, and \`StringBuffer\`?",
+                answer: `<strong>String:</strong> Immutable. Any modification creates a new object, which can be inefficient for frequent changes.<br><br><strong>StringBuilder:</strong> Mutable and not thread-safe. It's the faster choice for string manipulation in a single-threaded context.<br><br><strong>StringBuffer:</strong> Mutable and thread-safe (methods are synchronized). Use it when strings are modified by multiple threads.`
+            },
+            {
+                difficulty: "Easy",
+                title: "Difference between an \`interface\` and an \`abstract class\`?",
+                answer: `An <strong>abstract class</strong> is for an 'is-a' relationship, allowing you to share code and state among related classes (e.g., an \`Animal\` class with subclasses \`Dog\` and \`Cat\`). A class can only extend one abstract class.<br><br>An <strong>interface</strong> defines a 'can-do' contract. It specifies what a class can do without saying how. A class can implement multiple interfaces (e.g., a \`Bird\` class can implement \`Flyable\` and \`Singable\`).`
+            },
+            {
+                difficulty: "Medium",
+                title: "Explain the Java memory model (Heap vs. Stack).",
+                answer: `<strong>Stack Memory:</strong> Used for thread execution and static memory allocation. It stores primitive variables and references to objects. Each thread has its own stack. It's fast, LIFO (Last-In-First-Out), and has a fixed size.<br><br><strong>Heap Memory:</strong> Used for dynamic memory allocation for all objects. It's a shared memory space for all threads. Managed by the Garbage Collector, it's larger but slower than the stack.`
+            },
+            {
+                difficulty: "Medium",
+                title: "What are checked and unchecked exceptions in Java?",
+                answer: `<strong>Checked Exceptions:</strong> Exceptions checked at compile-time. The compiler forces you to handle them with a \`try-catch\` block or declare them with \`throws\`. They represent recoverable conditions (e.g., \`IOException\`).<br><br><strong>Unchecked Exceptions (Runtime Exceptions):</strong> Not checked at compile-time. They typically result from programming errors (e.g., \`NullPointerException\`, \`ArrayIndexOutOfBoundsException\`) and you aren't required to handle them.`
+            },
+            {
+                difficulty: "Medium",
+                title: "Explain the \`equals()\` and \`hashCode()\` contract.",
+                answer: `This contract is vital for hash-based collections like \`HashMap\`.<br>1. If two objects are equal according to \`equals()\`, their \`hashCode()\` must be the same.<br>2. If two objects are not equal, their \`hashCode()\` values do not have to be different, but it's better for performance if they are.<br><br><strong>Crucially:</strong> If you override \`equals()\`, you MUST also override \`hashCode()\` to ensure collections work correctly.`
+            },
+            {
+                difficulty: "Difficult",
+                title: "What is garbage collection in Java? How does it work?",
+                answer: `Garbage Collection (GC) is the automatic memory management process in the JVM that reclaims heap memory occupied by objects that are no longer referenced.<br><br>A common algorithm is <strong>Mark and Sweep</strong>:<br>1. <strong>Mark:</strong> The GC starts from GC Roots (e.g., active threads, static variables) and traverses the object graph, marking all reachable objects as 'alive'.<br>2. <strong>Sweep:</strong> The GC scans the heap and reclaims the memory of all unmarked (unreachable) objects.`
+            },
+            {
+                difficulty: "Difficult",
+                title: "Difference between \`fail-safe\` and \`fail-fast\` iterators?",
+                answer: `This concerns behavior during concurrent modification.<br><br><strong>Fail-fast Iterators:</strong> Throw a \`ConcurrentModificationException\` if the collection is changed while iterating (e.g., iterators for \`ArrayList\`, \`HashMap\`). They operate on the original collection.<br><br><strong>Fail-safe Iterators:</strong> Do not throw an exception because they operate on a clone of the collection (e.g., iterators for \`CopyOnWriteArrayList\`). They won't see modifications made after iteration began.`
+            },
+            {
+                difficulty: "Difficult",
+                title: "Explain how a \`HashMap\` works internally in Java.",
+                answer: `A \`HashMap\` uses an array of 'buckets', with each bucket pointing to a linked list or a red-black tree (for performance).<br><br><strong>\`put(key, value)\`:</strong><br>1. The key's \`hashCode()\` is used to compute an index in the array.<br>2. If the bucket at this index is empty, a new node is added.<br>3. If a collision occurs (bucket is not empty), the \`equals()\` method is used to check if the key already exists in the list/tree. If yes, the value is updated. If no, the new pair is added to the list/tree.`
+            }
+        ];
+
+        const questionsContainer = document.getElementById('questions-container');
+        const navButtons = document.querySelectorAll('.nav-btn');
+
+        const difficultyColors = {
+            Easy: 'border-green-500',
+            Medium: 'border-yellow-500',
+            Difficult: 'border-red-500'
+        };
+
+        const displayQuestions = (filter) => {
+            questionsContainer.innerHTML = '';
+            const filteredQuestions = questionData.filter(q => filter === 'all' || q.difficulty === filter);
+            
+            filteredQuestions.forEach(q => {
+                const card = `
+                    <div class="bg-white p-6 rounded-xl shadow-md border-l-4 ${difficultyColors[q.difficulty]} flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#03045e] mb-3">${q.title}</h3>
+                            <div class="text-gray-600 space-y-2 mb-4">${q.answer}</div>
+                        </div>
+                        <button class="explain-btn mt-4 bg-gray-100 text-[#0077b6] font-semibold py-2 px-4 rounded-lg shadow-sm hover:bg-gray-200 transition-colors duration-200" data-question-title="${q.title}" data-question-answer="${q.answer}">Explain Like I'm 5 ✨</button>
+                    </div>
+                `;
+                questionsContainer.innerHTML += card;
+            });
+
+            document.querySelectorAll('.explain-btn').forEach(button => {
+                button.addEventListener('click', async () => {
+                    const originalAnswer = button.dataset.questionAnswer;
+                    const originalTitle = button.dataset.questionTitle;
+                    const newAnswerContainer = button.parentElement.querySelector('div.text-gray-600.space-y-2');
+                    
+                    button.disabled = true;
+                    button.innerHTML = `<div class="spinner"></div>`;
+
+                    const prompt = `Please re-explain the following Java concept as simply as possible, as if you were explaining it to a five-year-old. The concept is "${originalTitle}" and the original explanation is: "${originalAnswer}". Please keep the explanation short and simple.`;
+                    
+                    const response = await callGeminiAPI(prompt);
+                    
+                    newAnswerContainer.innerHTML = response;
+                    button.remove();
+                });
+            });
+        };
+
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const filter = button.dataset.filter;
+                navButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                displayQuestions(filter);
+            });
+        });
+
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+              return label.join(' ');
+            } else {
+              return label;
+            }
+        };
+
+        // Initialize Charts
+        const difficultyCtx = document.getElementById('difficultyChart').getContext('2d');
+        new Chart(difficultyCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Easy', 'Medium', 'Difficult'],
+                datasets: [{
+                    label: '# of Questions',
+                    data: [3, 3, 3],
+                    backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
+                    borderColor: '#f0f4f8',
+                    borderWidth: 4,
+                    hoverOffset: 8,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    tooltip: { callbacks: { title: tooltipTitleCallback } }
+                },
+                cutout: '60%'
+            }
+        });
+        
+        const conceptRadarCtx = document.getElementById('conceptRadarChart').getContext('2d');
+        new Chart(conceptRadarCtx, {
+            type: 'radar',
+            data: {
+                labels: ['OOP Principles', 'Memory Model', 'Collections & Internals', 'Concurrency', 'Exceptions'],
+                datasets: [{
+                    label: 'Concept Emphasis',
+                    data: [4, 3, 5, 3, 2],
+                    backgroundColor: 'rgba(0, 119, 182, 0.2)',
+                    borderColor: '#0077b6',
+                    pointBackgroundColor: '#0077b6',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#0077b6'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { callbacks: { title: tooltipTitleCallback } }
+                },
+                scales: {
+                    r: {
+                        angleLines: { color: '#caf0f8' },
+                        grid: { color: '#caf0f8' },
+                        pointLabels: { font: { size: 13 }, color: '#023e8a' },
+                        ticks: {
+                            backdropColor: 'transparent',
+                            color: '#0077b6',
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        const callGeminiAPI = async (prompt) => {
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                tools: [{ "google_search": {} }],
+                systemInstruction: {
+                    parts: [{ text: "You are a helpful assistant for learning Java. Provide clear, concise answers without any extra conversational text." }]
+                }
+            };
+            
+            let response = null;
+            let retries = 0;
+            const maxRetries = 3;
+            const delay = 1000;
+
+            while (retries < maxRetries) {
+                try {
+                    response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (response.status === 429) {
+                        retries++;
+                        await new Promise(res => setTimeout(res, delay * Math.pow(2, retries)));
+                    } else if (!response.ok) {
+                        throw new Error(`API call failed with status: ${response.status}`);
+                    } else {
+                        break;
+                    }
+                } catch (error) {
+                    console.error('API call failed:', error);
+                    retries++;
+                    await new Promise(res => setTimeout(res, delay * Math.pow(2, retries)));
+                }
+            }
+
+            if (!response || !response.ok) {
+                return 'Sorry, I could not generate an answer at this time. Please try again later.';
+            }
+
+            const result = await response.json();
+            const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || "No response received.";
+            return text;
+        };
+
+        const generateQuestionBtn = document.getElementById('generateQuestionBtn');
+        const generateQuestionText = document.getElementById('generateQuestionText');
+        const generateQuestionSpinner = document.getElementById('generateQuestionSpinner');
+        const newQuestionContainer = document.getElementById('newQuestionContainer');
+        const newQuestionTitle = document.getElementById('newQuestionTitle');
+        const newQuestionAnswer = document.getElementById('newQuestionAnswer');
+
+        generateQuestionBtn.addEventListener('click', async () => {
+            generateQuestionBtn.disabled = true;
+            generateQuestionText.textContent = 'Generating...';
+            generateQuestionSpinner.classList.remove('hidden');
+
+            const prompt = `Generate a new, original Java interview question and a detailed answer. The question should be on a core concept like OOP, memory management, collections, or concurrency. The output should be in a JSON object with two keys: "question" and "answer". The answer can use HTML tags for formatting like <strong> and <br>.`;
+            
+            const response = await callGeminiAPI(prompt);
+            
+            generateQuestionBtn.disabled = false;
+            generateQuestionText.textContent = 'Generate a New ✨ Question';
+            generateQuestionSpinner.classList.add('hidden');
+
+            try {
+                const data = JSON.parse(response.replace(/```json\n|\n```/g, '').trim());
+                newQuestionTitle.textContent = data.question;
+                newQuestionAnswer.innerHTML = data.answer;
+                newQuestionContainer.classList.remove('hidden');
+            } catch (error) {
+                newQuestionTitle.textContent = 'Error Generating Question';
+                newQuestionAnswer.textContent = 'Sorry, the generated response was not in the expected format. Please try again.';
+                console.error('Failed to parse JSON:', error);
+            }
+        });
+
+
+        // Initial display
+        displayQuestions('all');
+    </script>
+</body>
+</html>
