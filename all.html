@@ -3,204 +3,414 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Interview Question Bank</title>
+<title>Comprehensive Interview Question Bank</title>
 <style>
-body { font-family: Arial, sans-serif; background: #f5f5f5; color: #333; margin: 0; }
-header { background: #222; color: #fff; padding: 1rem; text-align: center; }
-header input { padding: 0.5rem; width: 50%; margin-top: 0.5rem; }
-nav#toc { background: #eee; padding: 1rem; }
-nav#toc ul { list-style: none; padding: 0; }
-nav#toc li { margin: 0.5rem 0; }
-nav#toc a { text-decoration: none; color: #333; }
-main { padding: 1rem; }
-.qa { background: #fff; padding: 1rem; margin: 1rem 0; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
-.qa .answer { display: none; padding-top: 0.5rem; }
-.question { cursor: pointer; color: #007bff; }
-.question:hover { text-decoration: underline; }
-section h2 { border-bottom: 2px solid #ccc; padding-bottom: 0.5rem; }
+  body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; background: #f9f9f9; color: #333; }
+  h1, h2, h3 { color: #2c3e50; }
+  h1 { text-align: center; }
+  .toc { background: #ecf0f1; padding: 15px; margin-bottom: 20px; border-radius: 8px; }
+  .section { margin-bottom: 30px; }
+  .question { cursor: pointer; background: #3498db; color: white; padding: 10px; border-radius: 5px; margin: 5px 0; }
+  .answer { display: none; padding: 10px; background: #ecf0f1; border-radius: 5px; margin-bottom: 5px; white-space: pre-wrap; }
+  .search-box { margin-bottom: 20px; padding: 8px; width: 100%; max-width: 400px; }
 </style>
 </head>
 <body>
 
-<header>
-    <h1>Interview Question Bank</h1>
-    <input type="text" id="search" placeholder="Search questions...">
-</header>
+<h1>Comprehensive Interview Question Bank</h1>
 
-<nav id="toc">
-    <h2>Table of Contents</h2>
-    <ul>
-        <li><a href="#java">Java</a></li>
-        <li><a href="#nodejs">Node.js</a></li>
-        <li><a href="#react">React</a></li>
-        <li><a href="#python">Python</a></li>
-        <li><a href="#resume-projects">Resume & Projects</a></li>
-    </ul>
-</nav>
+<input type="text" id="search" class="search-box" placeholder="Search questions...">
 
-<main id="content">
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <ul>
+    <li><a href="#dbms">DBMS</a></li>
+    <li><a href="#java">Java</a></li>
+    <li><a href="#node">Node.js</a></li>
+    <li><a href="#python">Python</a></li>
+    <li><a href="#react">React</a></li>
+    <li><a href="#resume">Resume & Projects</a></li>
+  </ul>
+</div>
+
+<!-- DBMS Section -->
+<div id="dbms" class="section">
+  <h2>DBMS</h2>
+
+  <div class="question">Easy: What is the difference between SQL and NoSQL databases?</div>
+  <div class="answer">
+SQL (Relational Databases): They store data in structured tables with rows and columns. Predefined schema, use SQL. ACID guarantees. Examples: MySQL, PostgreSQL, Oracle.
+NoSQL (Non-relational Databases): Store data as document, key-value, wide-column, or graph. Flexible schema. BASE model. Examples: MongoDB, Redis, Cassandra.
+Hint: Think "structure vs. flexibility."
+Follow-up: When would you choose NoSQL over SQL?
+  </div>
+
+  <div class="question">Easy: What are primary keys and foreign keys?</div>
+  <div class="answer">
+Primary Key: Uniquely identifies a record. Unique values, no NULL, only one per table.
+Foreign Key: Links tables. Field in child table referring to parent table primary key.
+Hint: Primary key = student's ID. Foreign key = student's ID in Enrollments table.
+  </div>
+
+  <div class="question">Easy: Difference between DELETE, TRUNCATE, DROP in SQL?</div>
+  <div class="answer">
+DELETE: Removes rows based on WHERE. Rollback possible. Slower.
+TRUNCATE: Removes all rows. No WHERE. Cannot rollback in most DBs. Fast.
+DROP: Removes entire table structure and data. Cannot undo.
+  </div>
+
+  <div class="question">Medium: What is database normalization? Explain 1NF, 2NF, 3NF.</div>
+  <div class="answer">
+Normalization organizes tables/columns to minimize redundancy.
+1NF: Atomic values, unique records.
+2NF: 1NF + all non-key attrs depend on entire primary key.
+3NF: 2NF + no transitive dependencies.
+Hint: 1NF: No multi-value cells. 2NF: No partial dependencies. 3NF: No transitive.
+Follow-up: What is denormalization and when would you use it?
+  </div>
+
+  <div class="question">Medium: What are database indexes and why are they important?</div>
+  <div class="answer">
+Indexes speed up data retrieval. Pointer to table data, like a book index.
+Hint: Phone book analogy.
+Follow-up: Clustered vs Non-clustered index?
+  </div>
+
+  <div class="question">Medium: What are ACID properties?</div>
+  <div class="answer">
+Atomicity: All or nothing.
+Consistency: Valid state transitions.
+Isolation: Transactions don't interfere.
+Durability: Committed data persists.
+Follow-up: How is isolation implemented? (e.g., locking)
+  </div>
+
+  <div class="question">Difficult: Explain transaction isolation levels.</div>
+  <div class="answer">
+Read Uncommitted: Dirty reads possible.
+Read Committed: Prevent dirty reads, non-repeatable possible.
+Repeatable Read: Prevent dirty/non-repeatable, phantom possible.
+Serializable: Fully isolated, serial execution.
+Follow-up: Optimistic vs pessimistic locking?
+  </div>
+
+  <div class="question">Difficult: Database sharding vs partitioning.</div>
+  <div class="answer">
+Sharding: Horizontal split across DB servers. Each shard independent.
+Partitioning: Split table into smaller pieces on same server.
+Hint: Partitioning = single node, sharding = multi-node.
+Follow-up: Common sharding strategies?
+  </div>
+
+  <div class="question">Difficult: N+1 query problem?</div>
+  <div class="answer">
+Occurs when N queries are made for related data instead of one join query. Solved by eager loading, JOIN, or IN clause.
+Follow-up: When is JOIN less performant than IN clause?
+  </div>
+</div>
 
 <!-- Java Section -->
-<section id="java">
-    <h2>Java</h2>
+<div id="java" class="section">
+  <h2>Java</h2>
 
-    <div class="qa">
-        <h3 class="question">What is the difference between JDK, JRE, and JVM?</h3>
-        <div class="answer">
-            <p><strong>JVM:</strong> An abstract machine that executes bytecode.</p>
-            <p><strong>JRE:</strong> JVM + libraries needed to run Java programs.</p>
-            <p><strong>JDK:</strong> JRE + tools for development (compiler, debugger, etc.).</p>
-        </div>
-    </div>
+  <div class="question">Easy: Difference between JDK, JRE, JVM?</div>
+  <div class="answer">
+JVM: Executes Java bytecode. Abstract machine.
+JRE: JVM + libraries to run programs.
+JDK: JRE + development tools to write programs.
+Hint: JVM = core, JRE = runtime, JDK = development.
+  </div>
 
-    <div class="qa">
-        <h3 class="question">Difference between String, StringBuilder, and StringBuffer?</h3>
-        <div class="answer">
-            <p><strong>String:</strong> Immutable, every modification creates a new object.</p>
-            <p><strong>StringBuilder:</strong> Mutable, faster, not thread-safe.</p>
-            <p><strong>StringBuffer:</strong> Mutable, thread-safe, slightly slower.</p>
-        </div>
-    </div>
+  <div class="question">Easy: Difference between String, StringBuilder, StringBuffer?</div>
+  <div class="answer">
+String: Immutable.
+StringBuilder: Mutable, not thread-safe, faster.
+StringBuffer: Mutable, thread-safe, slower.
+  </div>
 
-    <div class="qa">
-        <h3 class="question">Difference between an interface and an abstract class?</h3>
-        <div class="answer">
-            <table border="1" cellpadding="5">
-                <tr><th>Feature</th><th>Abstract Class</th><th>Interface</th></tr>
-                <tr><td>Methods</td><td>Abstract + concrete</td><td>Abstract (default/static in Java 8+)</td></tr>
-                <tr><td>Variables</td><td>Any type</td><td>public static final only</td></tr>
-                <tr><td>Inheritance</td><td>Single</td><td>Multiple</td></tr>
-                <tr><td>Constructor</td><td>Yes</td><td>No</td></tr>
-                <tr><td>Purpose</td><td>Share code among related classes</td><td>Define contract for unrelated classes</td></tr>
-            </table>
-        </div>
-    </div>
+  <div class="question">Easy: Interface vs Abstract class</div>
+  <div class="answer">
+| Feature | Abstract Class | Interface |
+| Methods | Can have both abstract and concrete | Only abstract (Java 8+ default/static allowed) |
+| Variables | Any kind | Only public static final |
+| Inheritance | Single | Multiple |
+| Constructor | Yes | No |
+| Purpose | Common base | Contract for unrelated classes |
+  </div>
 
-    <!-- Additional Java Q&A can be added here similarly -->
+  <div class="question">Medium: Java memory model (Heap vs Stack)</div>
+  <div class="answer">
+Stack: Method calls, primitives, references. LIFO. Fast. Limited.
+Heap: Objects, dynamic memory. Shared. Slower. Managed by GC.
+  </div>
 
-</section>
+  <div class="question">Medium: Checked vs Unchecked exceptions</div>
+  <div class="answer">
+Checked: Compile-time, must handle. (IOException)
+Unchecked: Runtime, optional. (NullPointerException)
+Follow-up: finally block?
+  </div>
+
+  <div class="question">Medium: equals() & hashCode() contract</div>
+  <div class="answer">
+Equal objects must have equal hash codes. Override both for HashMap/HashSet.
+Follow-up: What happens if only equals() is overridden?
+  </div>
+
+  <div class="question">Difficult: Garbage Collection</div>
+  <div class="answer">
+Mark & Sweep: Mark reachable objects, sweep unreachable. Compact optional. Modern GCs use advanced algorithms.
+Follow-up: Name GC types (Serial, Parallel, G1GC)
+  </div>
+
+  <div class="question">Difficult: Fail-fast vs Fail-safe iterators</div>
+  <div class="answer">
+Fail-fast: Throws exception on concurrent modification.
+Fail-safe: Works on clone, no exception.
+Follow-up: Why CopyOnWriteArrayList over synchronized ArrayList?
+  </div>
+
+  <div class="question">Difficult: HashMap internal working</div>
+  <div class="answer">
+Buckets (array + linked list/tree). hashCode -> index -> bucket -> equals() check.
+Resize when too full.
+  </div>
+</div>
 
 <!-- Node.js Section -->
-<section id="nodejs">
-    <h2>Node.js</h2>
+<div id="node" class="section">
+  <h2>Node.js</h2>
 
-    <div class="qa">
-        <h3 class="question">What is Node.js?</h3>
-        <div class="answer">
-            <p>Node.js is an open-source, cross-platform, back-end JavaScript runtime built on Google Chrome's V8 engine. It executes JS outside the browser.</p>
-        </div>
-    </div>
+  <div class="question">Easy: What is Node.js?</div>
+  <div class="answer">
+Back-end JS runtime on V8, executes JS outside browser, server-side scripting.
+  </div>
 
-    <div class="qa">
-        <h3 class="question">What is NPM?</h3>
-        <div class="answer">
-            <p>NPM is the Node Package Manager. It includes a CLI for managing packages and an online registry for open-source packages.</p>
-        </div>
-    </div>
+  <div class="question">Easy: What is NPM?</div>
+  <div class="answer">
+Node Package Manager. CLI + registry. package.json lists dependencies.
+  </div>
 
-    <div class="qa">
-        <h3 class="question">Explain the Node.js event loop.</h3>
-        <div class="answer">
-            <p>The event loop allows Node.js to perform non-blocking I/O operations. Async operations are handled by the OS, and callbacks are queued to execute sequentially in the loop.</p>
-        </div>
-    </div>
+  <div class="question">Easy: Purpose of package.json?</div>
+  <div class="answer">
+Manifest file: dependencies, scripts, metadata. Central for project reproducibility.
+  </div>
 
-    <!-- Additional Node.js Q&A can be added here -->
+  <div class="question">Medium: Explain event loop</div>
+  <div class="answer">
+Single thread non-blocking I/O. Kernel handles async ops, callbacks queued, event loop processes them.
+  </div>
 
-</section>
+  <div class="question">Medium: require() vs import</div>
+  <div class="answer">
+require(): CommonJS, synchronous.
+import: ESM, asynchronous, modern standard.
+  </div>
 
-<!-- React Section -->
-<section id="react">
-    <h2>React</h2>
+  <div class="question">Medium: Middleware in Express.js</div>
+  <div class="answer">
+Functions with req, res, next. Can modify request/response, end cycle, call next.
+  </div>
 
-    <div class="qa">
-        <h3 class="question">What is JSX?</h3>
-        <div class="answer">
-            <p>JSX is a syntax extension for JavaScript that looks like HTML. It’s transpiled to JS before the browser can understand it.</p>
-        </div>
-    </div>
+  <div class="question">Difficult: Node.js streams</div>
+  <div class="answer">
+Readable, Writable, Duplex, Transform. Memory-efficient, process data in chunks.
+Follow-up: Flowing vs paused mode?
+  </div>
 
-    <div class="qa">
-        <h3 class="question">Difference between props and state?</h3>
-        <div class="answer">
-            <p><strong>Props:</strong> Data passed from parent, read-only.</p>
-            <p><strong>State:</strong> Data managed within a component, mutable.</p>
-        </div>
-    </div>
+  <div class="question">Difficult: Node.js cluster module</div>
+  <div class="answer">
+Fork multiple workers, share ports, scale across CPU cores.
+  </div>
 
-    <div class="qa">
-        <h3 class="question">What is Virtual DOM?</h3>
-        <div class="answer">
-            <p>Virtual DOM is a lightweight copy of the real DOM. React updates it first, then calculates minimal changes for the real DOM.</p>
-        </div>
-    </div>
-
-    <!-- Additional React Q&A can be added here -->
-
-</section>
+  <div class="question">Difficult: Error handling in async Node.js</div>
+  <div class="answer">
+Callbacks (error-first) or Promises/async-await. Handle uncaughtException and unhandledRejection at process level.
+  </div>
+</div>
 
 <!-- Python Section -->
-<section id="python">
-    <h2>Python</h2>
+<div id="python" class="section">
+  <h2>Python</h2>
 
-    <div class="qa">
-        <h3 class="question">Difference between list and tuple?</h3>
-        <div class="answer">
-            <p><strong>List:</strong> Mutable.</p>
-            <p><strong>Tuple:</strong> Immutable, can be used as dictionary keys.</p>
-        </div>
-    </div>
+  <div class="question">Easy: List vs Tuple</div>
+  <div class="answer">
+List: mutable, []
+Tuple: immutable, (). Tuples can be dict keys, memory-efficient.
+  </div>
 
-    <div class="qa">
-        <h3 class="question">What are Python decorators?</h3>
-        <div class="answer">
-            <p>Decorators wrap a function to add new functionality without changing the function's structure.</p>
-        </div>
-    </div>
+  <div class="question">Easy: Python decorators</div>
+  <div class="answer">
+Decorators add functionality without modifying object. @ syntax.
+  </div>
 
-    <!-- Additional Python Q&A can be added here -->
+  <div class="question">Easy: .py vs .pyc</div>
+  <div class="answer">
+.py = source code. .pyc = compiled bytecode, faster next run.
+  </div>
 
-</section>
+  <div class="question">Medium: GIL</div>
+  <div class="answer">
+Mutex for one thread at a time in CPython. Blocks CPU-bound parallelism, allows I/O concurrency.
+Follow-up: multiprocessing module for true parallelism.
+  </div>
+
+  <div class="question">Medium: List comprehensions & generators</div>
+  <div class="answer">
+List comprehension: [x*x for x in range(10)]
+Generator: (x*x for x in range(10)), yields items one by one.
+Follow-up: yield keyword
+  </div>
+
+  <div class="question">Medium: __init__ vs __new__</div>
+  <div class="answer">
+__new__: creates object
+__init__: initializes object
+  </div>
+
+  <div class="question">Difficult: Memory management</div>
+  <div class="answer">
+Reference counting + cyclic GC. Zero references = deallocated.
+  </div>
+
+  <div class="question">Difficult: Metaclasses</div>
+  <div class="answer">
+Metaclass = class of class. Can modify class creation automatically.
+  </div>
+
+  <div class="question">Difficult: Descriptor protocol</div>
+  <div class="answer">
+__get__, __set__, __delete__. Underlies properties, methods.
+Follow-up: Data descriptor vs non-data descriptor.
+  </div>
+</div>
+
+<!-- React Section -->
+<div id="react" class="section">
+  <h2>React</h2>
+
+  <div class="question">Easy: JSX</div>
+  <div class="answer">
+JSX = HTML-like syntax in JS. Needs transpiling.
+  </div>
+
+  <div class="question">Easy: Props vs State</div>
+  <div class="answer">
+Props: from parent, read-only
+State: mutable, inside component, triggers re-render
+  </div>
+
+  <div class="question">Easy: Virtual DOM</div>
+  <div class="answer">
+VDOM = in-memory UI copy, diffing, minimal real DOM updates.
+  </div>
+
+  <div class="question">Medium: Lifecycle with hooks</div>
+  <div class="answer">
+useEffect manages mount, update, unmount. Dependency array controls execution. Cleanup function for unmount.
+  </div>
+
+  <div class="question">Medium: Hooks</div>
+  <div class="answer">
+useState, useEffect, useContext, useRef. Modern functional component state & lifecycle.
+  </div>
+
+  <div class="question">Medium: Prop drilling</div>
+  <div class="answer">
+Pass props through multiple levels. Avoid with Context API, state management libs, or composition.
+  </div>
+
+  <div class="question">Difficult: Reconciliation (diffing)</div>
+  <div class="answer">
+Diffing: different type = replace tree. Same type = update attributes. List keys crucial.
+  </div>
+
+  <div class="question">Difficult: useMemo & useCallback</div>
+  <div class="answer">
+useMemo = memoize value
+useCallback = memoize function
+Avoid expensive re-renders.
+  </div>
+
+  <div class="question">Difficult: HOC vs Custom Hooks</div>
+  <div class="answer">
+HOC wraps component, injects props. Custom hooks share logic inside functional components. Hooks preferred.
+  </div>
+</div>
 
 <!-- Resume & Projects Section -->
-<section id="resume-projects">
-    <h2>Resume & Projects</h2>
+<div id="resume" class="section">
+  <h2>Resume & Projects</h2>
 
-    <div class="qa">
-        <h3 class="question">Can you walk me through your resume?</h3>
-        <div class="answer">
-            <p>Start with an elevator pitch, then chronologically cover experiences highlighting key achievements.</p>
-        </div>
-    </div>
+  <div class="question">Easy: Walk me through your resume</div>
+  <div class="answer">
+Brief elevator pitch. Chronologically describe experiences with 1-2 achievements each.
+Follow-up: "You mentioned [project/skill], tell me more."
+  </div>
 
-    <div class="qa">
-        <h3 class="question">Tell me about a project you are most proud of?</h3>
-        <div class="answer">
-            <p>Use STAR method (Situation, Task, Action, Result) to explain project goals, actions taken, and outcomes.</p>
-        </div>
-    </div>
+  <div class="question">Easy: Project you are most proud of</div>
+  <div class="answer">
+Use STAR method. Describe Situation, Task, Action, Result.
+Follow-up: Biggest technical challenge?
+  </div>
 
-    <!-- Additional Resume & Projects Q&A can be added here -->
+  <div class="question">Medium: Most difficult challenge in project</div>
+  <div class="answer">
+Be specific. Show problem-solving & technical depth.
+Follow-up: Alternative solutions considered?
+  </div>
 
-</section>
+  <div class="question">Medium: Explain project architecture</div>
+  <div class="answer">
+Describe high-level components, e.g., React front-end, Node.js backend, MongoDB, AWS.
+Follow-up: Why MongoDB over SQL?
+  </div>
 
-</main>
+  <div class="question">Medium: Disagreement with team member</div>
+  <div class="answer">
+Focus on technical disagreement, resolution with data and proof-of-concept.
+  </div>
+
+  <div class="question">Difficult: If you could start project again</div>
+  <div class="answer">
+Show self-awareness. What you would improve and why.
+Follow-up: Impact on timeline & complexity?
+  </div>
+
+  <div class="question">Difficult: How did you test project</div>
+  <div class="answer">
+Unit tests, integration tests, manual E2E, CI/CD pipeline.
+Follow-up: Code coverage, handling critical bugs.
+  </div>
+
+  <div class="question">Difficult: Scaling project 10x users</div>
+  <div class="answer">
+Identify bottlenecks: database, backend, frontend. Horizontal scaling, CDN, load balancer.
+Follow-up: Trade-offs horizontal vs vertical scaling.
+  </div>
+</div>
 
 <script>
-document.querySelectorAll('.question').forEach(q => {
+  document.querySelectorAll('.question').forEach(q => {
     q.addEventListener('click', () => {
-        const answer = q.nextElementSibling;
-        answer.style.display = answer.style.display === 'block' ? 'none' : 'block';
+      const a = q.nextElementSibling;
+      a.style.display = a.style.display === 'block' ? 'none' : 'block';
     });
-});
+  });
 
-document.getElementById('search').addEventListener('input', (e) => {
-    const query = e.target.value.toLowerCase();
-    document.querySelectorAll('.qa').forEach(qa => {
-        const text = qa.textContent.toLowerCase();
-        qa.style.display = text.includes(query) ? 'block' : 'none';
+  document.getElementById('search').addEventListener('input', e => {
+    const val = e.target.value.toLowerCase();
+    document.querySelectorAll('.question').forEach(q => {
+      const txt = q.textContent.toLowerCase();
+      if (txt.includes(val)) {
+        q.style.display = 'block';
+        q.nextElementSibling.style.display = 'none';
+      } else {
+        q.style.display = 'none';
+        q.nextElementSibling.style.display = 'none';
+      }
     });
-});
+  });
 </script>
 
 </body>
