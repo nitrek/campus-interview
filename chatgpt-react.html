@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interview Question Bank</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f9fa;
+        color: #212529;
+    }
+    header {
+        background: #007bff;
+        color: white;
+        text-align: center;
+        padding: 15px;
+        font-size: 24px;
+    }
+    .container {
+        display: flex;
+        min-height: 100vh;
+    }
+    .sidebar {
+        width: 220px;
+        background: #343a40;
+        color: white;
+        padding: 20px;
+    }
+    .sidebar h2 {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+    .sidebar button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: none;
+        background: #495057;
+        color: white;
+        text-align: left;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    .sidebar button.active {
+        background: #007bff;
+    }
+    .content {
+        flex: 1;
+        padding: 20px;
+    }
+    .search-box {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+    .question {
+        background: white;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .question h3 {
+        margin: 0;
+        font-size: 18px;
+        cursor: pointer;
+    }
+    .answer {
+        display: none;
+        margin-top: 10px;
+        font-size: 15px;
+    }
+    .hint {
+        color: #6c757d;
+        font-style: italic;
+    }
+    .dark-mode {
+        background: #121212;
+        color: #f8f9fa;
+    }
+    .dark-mode .sidebar {
+        background: #1e1e1e;
+    }
+    .dark-mode .question {
+        background: #1e1e1e;
+        border: 1px solid #333;
+    }
+    .toggle-dark {
+        margin-top: 20px;
+        padding: 10px;
+        background: #007bff;
+        border: none;
+        color: white;
+        cursor: pointer;
+        width: 100%;
+    }
+    .copy-btn {
+        margin-top: 10px;
+        padding: 5px 10px;
+        font-size: 14px;
+        cursor: pointer;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+    }
+</style>
+</head>
+<body>
+<header>Interview Question Bank</header>
+<div class="container">
+    <div class="sidebar">
+        <h2>Categories</h2>
+        <button class="tab-btn active" data-tab="react">React</button>
+        <button class="tab-btn" data-tab="resume">Resume & Projects</button>
+        <button class="toggle-dark">Toggle Dark Mode</button>
+    </div>
+    <div class="content">
+        <input type="text" class="search-box" placeholder="Search questions...">
+        
+        <!-- React Questions -->
+        <div id="react" class="tab-content active">
+            <h2>React Question Bank</h2>
+            <!-- React Questions will go here -->
+        </div>
+        
+        <!-- Resume & Projects Questions -->
+        <div id="resume" class="tab-content" style="display:none;">
+            <h2>Resume & Projects Question Bank</h2>
+            <!-- Resume Questions will go here -->
+        </div>
+    </div>
+</div>
+
+<script>
+// Data for React and Resume Questions
+const questions = {
+    react: [
+        {
+            question: "What is JSX?",
+            answer: "JSX stands for JavaScript XML. It allows you to write HTML-like code in JavaScript, making React components easier to read.",
+            hint: "Example: const element = <h1>Hello, world!</h1>;"
+        },
+        {
+            question: "What is the difference between props and state?",
+            answer: "Props are read-only and passed from parent to child. State is local to a component and can be updated using useState or setState.",
+            hint: "Props = external, State = internal"
+        },
+        {
+            question: "What is the Virtual DOM?",
+            answer: "A lightweight copy of the real DOM that React uses for efficient updates.",
+            hint: "React updates Virtual DOM first, then syncs with real DOM."
+        }
+    ],
+    resume: [
+        {
+            question: "Can you walk me through your resume?",
+            answer: "Start with a brief intro, then highlight key experiences and achievements in 2–3 minutes.",
+            hint: "Tell a story, not just facts."
+        },
+        {
+            question: "Tell me about a project you are most proud of.",
+            answer: "Use the STAR method: Situation, Task, Action, Result.",
+            hint: "Pick a project that shows technical and problem-solving skills."
+        },
+        {
+            question: "What was the most difficult challenge you faced during a project?",
+            answer: "Be specific. Example: Optimized DB queries using indexes and caching.",
+            hint: "Focus on a technical challenge and how you solved it."
+        }
+    ]
+};
+
+// Render questions dynamically
+function renderQuestions(category) {
+    const container = document.getElementById(category);
+    container.innerHTML = `<h2>${category === 'react' ? 'React Question Bank' : 'Resume & Projects Question Bank'}</h2>`;
+    questions[category].forEach(q => {
+        const div = document.createElement('div');
+        div.className = 'question';
+        div.innerHTML = `
+            <h3>${q.question}</h3>
+            <div class="answer">${q.answer}<br><span class="hint">Hint: ${q.hint}</span>
+                <br><button class="copy-btn">Copy Question</button>
+            </div>
+        `;
+        container.appendChild(div);
+    });
+}
+
+renderQuestions('react');
+renderQuestions('resume');
+
+// Toggle answer
+document.addEventListener('click', e => {
+    if (e.target.tagName === 'H3') {
+        const answer = e.target.nextElementSibling;
+        answer.style.display = answer.style.display === 'block' ? 'none' : 'block';
+    }
+    if (e.target.classList.contains('copy-btn')) {
+        const questionText = e.target.closest('.question').querySelector('h3').innerText;
+        navigator.clipboard.writeText(questionText);
+        e.target.innerText = 'Copied!';
+        setTimeout(() => e.target.innerText = 'Copy Question', 1500);
+    }
+});
+
+// Tab switching
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+        document.getElementById(btn.dataset.tab).style.display = 'block';
+    });
+});
+
+// Search filter
+document.querySelector('.search-box').addEventListener('input', e => {
+    const term = e.target.value.toLowerCase();
+    document.querySelectorAll('.tab-content.active .question').forEach(q => {
+        q.style.display = q.querySelector('h3').innerText.toLowerCase().includes(term) ? 'block' : 'none';
+    });
+});
+
+// Dark mode toggle
+document.querySelector('.toggle-dark').addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+});
+</script>
+</body>
+</html>

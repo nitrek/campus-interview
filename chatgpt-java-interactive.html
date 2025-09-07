@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Question Bank</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Prism.js for syntax highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+    <div class="container mx-auto p-6">
+        <h1 class="text-4xl font-bold mb-6 text-center">Java Question Bank</h1>
+        
+        <!-- Search Bar -->
+        <div class="mb-6 flex justify-center">
+            <input id="searchInput" type="text" placeholder="Search questions..." 
+                class="w-full md:w-1/2 p-3 border rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+        </div>
+
+        <!-- Accordion Container -->
+        <div id="accordion" class="space-y-4">
+
+            <!-- EASY Section -->
+            <h2 class="text-2xl font-semibold mb-2">Easy</h2>
+
+            <!-- Question 1 -->
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <button class="w-full text-left p-4 font-semibold hover:bg-gray-100" onclick="toggleAnswer(this)">
+                    What is the difference between JDK, JRE, and JVM?
+                </button>
+                <div class="answer hidden p-4 border-t">
+                    <p><strong>JVM:</strong> Runs Java bytecode, platform-independent.</p>
+                    <p><strong>JRE:</strong> JVM + libraries for running Java apps.</p>
+                    <p><strong>JDK:</strong> JRE + tools for development (compiler, debugger).</p>
+                    <p><strong>Hint:</strong> JVM = core, JRE = JVM + libs, JDK = JRE + tools.</p>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <button class="w-full text-left p-4 font-semibold hover:bg-gray-100" onclick="toggleAnswer(this)">
+                    What is the difference between String, StringBuilder, and StringBuffer?
+                </button>
+                <div class="answer hidden p-4 border-t">
+                    <ul class="list-disc ml-6">
+                        <li><strong>String:</strong> Immutable, new object for every change.</li>
+                        <li><strong>StringBuilder:</strong> Mutable, not thread-safe, faster.</li>
+                        <li><strong>StringBuffer:</strong> Mutable, thread-safe, slower.</li>
+                    </ul>
+                    <p><strong>Hint:</strong> String = immutable, StringBuilder = fast, StringBuffer = safe.</p>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <button class="w-full text-left p-4 font-semibold hover:bg-gray-100" onclick="toggleAnswer(this)">
+                    What is the difference between an interface and an abstract class?
+                </button>
+                <div class="answer hidden p-4 border-t">
+                    <table class="border-collapse border border-gray-300 w-full">
+                        <thead>
+                            <tr>
+                                <th class="border p-2">Feature</th>
+                                <th class="border p-2">Abstract Class</th>
+                                <th class="border p-2">Interface</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border p-2">Methods</td>
+                                <td class="border p-2">Can have abstract and concrete</td>
+                                <td class="border p-2">Only abstract (Java 8+ allows default/static)</td>
+                            </tr>
+                            <tr>
+                                <td class="border p-2">Variables</td>
+                                <td class="border p-2">final, non-final, static</td>
+                                <td class="border p-2">public static final only</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- MEDIUM Section -->
+            <h2 class="text-2xl font-semibold mt-6 mb-2">Medium</h2>
+
+            <!-- Question: Memory Model -->
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <button class="w-full text-left p-4 font-semibold hover:bg-gray-100" onclick="toggleAnswer(this)">
+                    Explain the Java memory model (Heap vs. Stack).
+                </button>
+                <div class="answer hidden p-4 border-t">
+                    <p><strong>Stack:</strong> Stores method calls & local variables (LIFO, fast).</p>
+                    <p><strong>Heap:</strong> Stores objects (managed by GC, shared across threads).</p>
+                    <pre><code class="language-java">int x = 10; // x in stack
+Person p = new Person(); // p reference in stack, object in heap</code></pre>
+                </div>
+            </div>
+
+            <!-- Add other questions similarly... -->
+
+        </div>
+    </div>
+
+    <script>
+        // Toggle Answer Visibility
+        function toggleAnswer(button) {
+            const answer = button.nextElementSibling;
+            answer.classList.toggle("hidden");
+        }
+
+        // Search Functionality
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const questions = document.querySelectorAll('#accordion > div');
+            questions.forEach(q => {
+                const text = q.innerText.toLowerCase();
+                q.style.display = text.includes(query) ? 'block' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>
